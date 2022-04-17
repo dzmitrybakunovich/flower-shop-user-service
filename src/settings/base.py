@@ -2,16 +2,21 @@ import os
 import sys
 from pathlib import Path
 
+from django.core.management.utils import get_random_secret_key
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(os.path.join(PROJECT_DIR, 'apps'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^e%jt1vcqs#ko07-e$q=k96ix42&wiab%38-hmiowkc%#k%$&n'
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    get_random_secret_key()
+)
 
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
+DEBUG = os.environ.get('DEBUG', default=False)
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', default=['*'])
+CORS_ORIGIN_ALLOW_ALL = os.environ.get('DEBUG', default=False)
 
 # Application definition
 INSTALLED_APPS = [
@@ -25,12 +30,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_spectacular',
+    'corsheaders',
 
     'users',
     'notifications',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -71,9 +79,6 @@ DATABASES = {
         'PORT': 5432,
     }
 }
-# DATABASE_URL = os.environ.get('DATABASE_URL')
-# db_from_env = dj_database_url.config(default=DATABASE_URL, conn_max_age=500, ssl_require=True)
-# DATABASES['default'].update(db_from_env)
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -109,7 +114,18 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_RENDERER_CLASSES': (
+        'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+    ),
+    'JSON_UNDERSCOREIZE': {
+        'no_underscore_before_number': True,
+    },
+    'DEFAULT_SCHEMA_CLASS': (
+        'drf_spectacular.openapi.AutoSchema'
+    ),
 }
 
 SIMPLE_JWT = {
@@ -118,10 +134,13 @@ SIMPLE_JWT = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'FSU service',
+    'TITLE': 'USERS SERVICE',
     'DESCRIPTION': 'Flower shop users service',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+    'POSTPROCESSING_HOOKS': [
+        'drf_spectacular.contrib.djangorestframework_camel_case.camelize_serializer_fields',
+    ],
 }
 
 CELERY_BROKER_URL = os.environ.get('REDIS_URL', 'redis://redis:6379')
@@ -129,7 +148,7 @@ CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL', 'redis://redis:6379')
 CELERY_TIMEZONE = 'Europe/Minsk'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = ''
-EMAIL_PORT = 587
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('PORT')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
