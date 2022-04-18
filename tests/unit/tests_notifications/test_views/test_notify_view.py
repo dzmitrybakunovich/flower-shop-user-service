@@ -16,6 +16,8 @@ class TestNotifyView:
                 {
                     'subject': 'Test',
                     'message': 'Test',
+                    'recipientsList': [str(user.uuid), str(admin.uuid)],
+                    'carbonCopyList': []
                 }
             ),
             content_type='application/json',
