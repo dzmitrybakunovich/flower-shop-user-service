@@ -11,7 +11,7 @@ class NotifyService(BaseService):
             subject: str,
             message: str,
             recipients_list: list,
-            carbon_copy_list: list,
+            carbon_copy_list: list = None,
             headers: Optional[str] = None,
     ) -> None:
         self.recipients_list = recipients_list
@@ -22,7 +22,7 @@ class NotifyService(BaseService):
 
     def perform(self, **kwargs) -> None:
         recipients = self._get_recipients()
-        carbon_copy = self._get_carbon_copy()
+        carbon_copy = self._get_carbon_copy() if self.carbon_copy_list else None
 
         send_mail.s(
             subject=self.subject,

@@ -2,14 +2,14 @@ from rest_framework import serializers
 
 
 class NotifySerializer(serializers.Serializer):
-    subject = serializers.CharField(required=True)
-    message = serializers.CharField(required=True)
+    subject = serializers.CharField()
+    message = serializers.CharField()
     recipients_list = serializers.ListField(
         child=serializers.UUIDField(),
-        required=True,
     )
     carbon_copy_list = serializers.ListField(
         child=serializers.UUIDField(),
+        required=False,
     )
 
     def create(self, validated_data):
