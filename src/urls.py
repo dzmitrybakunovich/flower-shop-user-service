@@ -11,11 +11,11 @@ api_v1_urlpatterns: list = [
             namespace='notifications')
     ),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'),
+    path('swagger/', SpectacularSwaggerView.as_view(url_name='api_v1:schema'),
          name='swagger-ui'),
 ]
 
 urlpatterns: list = [
-    path('api/v1/', include(api_v1_urlpatterns)),
+    path('api/v1/', include((api_v1_urlpatterns, 'api_v1'))),
     path('admin/', admin.site.urls),
 ]
