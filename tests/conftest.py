@@ -26,7 +26,7 @@ def user():
 
 @pytest.fixture
 def admin():
-    """User instance."""
+    """Administrator instance."""
     admin = UserFactory(
         uuid=uuid.uuid4(),
         username='admin',
@@ -39,7 +39,7 @@ def admin():
 
 @pytest.fixture()
 def drf_client(user):
-    """A Django Rest Framework test client instance."""
+    """A Django Rest Framework authenticate client instance."""
     from rest_framework.test import APIClient
     client = APIClient()
     refresh = RefreshToken.for_user(user)

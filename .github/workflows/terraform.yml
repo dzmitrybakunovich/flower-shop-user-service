@@ -6,23 +6,35 @@ on:
       - master
 
 jobs:
-#  CI:
-#    runs-on: ubuntu-latest
-  CD:
-#    needs: [CI]
+  CI:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
         with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Terraform Init
-        id: init
-        run: terraform init
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+          python-version: 3.9.10
+
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: 1.1.10
+      - name: View poetry --help
+        run: poetry --help
+#  CD:
+##    needs: [CI]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Setup Terraform
+#        uses: hashicorp/setup-terraform@v1
+#        with:
+#          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+#      - name: Terraform Init
+#        id: init
+#        run: terraform init
+#      - name: Terraform Validate
+#        id: validate
+#        run: terraform validate -no-color
+#      - name: Terraform Apply
+#        run: terraform apply -auto-approve
