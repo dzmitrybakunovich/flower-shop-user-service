@@ -23,21 +23,21 @@ jobs:
 
       - name: Start tests
         run: poetry run pytest -rP
-#  CD:
-##    needs: [CI]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#      - name: Setup Terraform
-#        uses: hashicorp/setup-terraform@v1
-#        with:
-#          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-#      - name: Terraform Init
-#        id: init
-#        run: terraform init
-#      - name: Terraform Validate
-#        id: validate
-#        run: terraform validate -no-color
+  CD:
+    needs: [CI]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
 #      - name: Terraform Apply
 #        run: terraform apply -auto-approve
