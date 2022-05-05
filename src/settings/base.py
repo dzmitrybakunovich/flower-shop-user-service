@@ -14,7 +14,7 @@ SECRET_KEY = os.environ.get(
     get_random_secret_key()
 )
 
-DEBUG = os.environ.get('DEBUG', default=False)
+DEBUG = os.environ.get('DEBUG', default=True)
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', default=['*'])
 CORS_ORIGIN_ALLOW_ALL = os.environ.get('DEBUG', default=False)
 
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'core',
     'users',
     'notifications',
+    'favorites',
 ]
 
 MIDDLEWARE = [
