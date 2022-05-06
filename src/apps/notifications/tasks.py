@@ -14,12 +14,7 @@ def send_mail(
         headers: Optional[dict] = None,
 ):
     print(subject, message, to_email, cc_list, headers)
-    # subject = 'Subject'
-    # message = render_to_string('notifications/send_email.html', {'context': 'values'})
-    # # message = strip_tags(html_message)
-    # from_email = 'From <from@example.com>'
-    # to_email = 'to@example.com'
-    #
+
     mail = EmailMultiAlternatives(
         subject,
         message,
@@ -28,6 +23,4 @@ def send_mail(
         cc=cc_list,
         headers=headers,
     )
-    #
-    # mail.attach_alternative(html_message, 'text/html')
     mail.send()

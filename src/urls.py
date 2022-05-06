@@ -4,6 +4,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 api_v1_urlpatterns: list = [
     path('users/', include(('users.urls', 'users'), namespace='users')),
+    path('favorites/', include(('favorites.urls', 'favorites'), namespace='favorites')),
     path(
         'notifications/',
         include(

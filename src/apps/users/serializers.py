@@ -8,11 +8,12 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = [
-            'uuid',
-            'username',
-            'email',
-        ]
+        fields = '__all__'
+        #     [
+        #     'uuid',
+        #     'username',
+        #     'email',
+        # ]
 
 
 class RegisterSerializer(serializers.ModelSerializer):
