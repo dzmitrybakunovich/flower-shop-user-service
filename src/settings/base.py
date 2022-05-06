@@ -16,7 +16,6 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get('DEBUG', default=True)
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', default=['*'])
-CORS_ORIGIN_ALLOW_ALL = os.environ.get('DEBUG', default=False)
 
 # Application definition
 INSTALLED_APPS = [
@@ -154,3 +153,7 @@ EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_PORT = os.environ.get('PORT')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+
+# CORS
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True

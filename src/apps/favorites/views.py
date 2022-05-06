@@ -6,22 +6,28 @@ from rest_framework.views import APIView
 from .models import Favorite
 from .serializers import FavoriteSerializer
 
+from notifications.tasks import send_mail
 
-class FavoriteUserListView(APIView):
+
+class FavoriteNotifyView(APIView):
     permission_classes = (
         IsAuthenticated,
     )
     serializer_class = FavoriteSerializer
 
     def post(self, request, item_id):
-        favorites = Favorite.objects.filter(
+        recipients = list(Favorite.objects.filter(
             item_id=item_id
-        )
-        serializer = self.serializer_class(favorites, many=True)
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
+        ).values_list('user_id', flat=True)
+                          )
+        print(recipients)
+
+        send_mail.s(
+            subject='qqq',
+            message='qwqeqwe',
+            to_email=recipients,
+        ).apply_async()
+        return Response(status=status.HTTP_200_OK)
 
 
 class FavoriteCreateView(APIView):
@@ -33,7 +39,7 @@ class FavoriteCreateView(APIView):
     def post(self, request, item_id):
         favorite = Favorite.objects.create(
             user=request.user,
-            item=item_id,
+            item_id=item_id,
         )
         favorite.save()
         return Response(status=status.HTTP_200_OK)
