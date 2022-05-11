@@ -6,15 +6,32 @@ from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(required=False)
+    password = serializers.CharField(
+        write_only=True,
+        required=False,
+        validators=[validate_password]
+    )
+    password2 = serializers.CharField(write_only=True, required=False)
+
     class Meta:
         model = User
         fields = '__all__'
-        #     [
-        #     'uuid',
-        #     'username',
-        #     'email',
-        # ]
 
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(required=False)
+    photo = serializers.ImageField(required=False)
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'photo',
+            'first_name',
+            'last_name',
+            'email'
+        ]
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(

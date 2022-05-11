@@ -1,10 +1,13 @@
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.decorators import parser_classes
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView, \
+    RetrieveAPIView, UpdateAPIView
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import User
-from .serializers import RegisterSerializer, UserSerializer
+from .serializers import RegisterSerializer, UserSerializer, UpdateUserSerializer
 
 
 class RegisterView(CreateAPIView):
@@ -32,12 +35,21 @@ class UserDetailView(RetrieveAPIView):
     serializer_class = UserSerializer
 
 
-class CurrentUserView(APIView):
+class UserUpdateView(UpdateAPIView):
     permission_classes = (
         IsAuthenticated,
     )
-    serializer_class = UserSerializer
+    lookup_field = 'uuid'
+    queryset = User.objects.all()
+    serializer_class = UpdateUserSerializer
+    parser_classes = (MultiPartParser,)
 
-    def get(self, request):
-        serializer = self.serializer_class(request.user)
-        return Response(serializer.data)
+# class CurrentUserView(APIView):
+#     permission_classes = (
+#         IsAuthenticated,
+#     )
+#     serializer_class = UserSerializer
+#
+#     def get(self, request):
+#         serializer = self.serializer_class(request.user)
+#         return Response(serializer.data)
